@@ -30,7 +30,7 @@ const Link = () => {
           return;
         }
         const data = await response.json();
-        console.log(data);
+        console.log(data)
         dispatch({
           type: "SET_STATE",
           state: {

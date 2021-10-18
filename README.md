@@ -1,3 +1,34 @@
+# Explanation
+
+1. When you load up the app it will generate a link that you can click on. This is done by using the "/api/create_link_token" end point.
+2. After you click on the link it will generate a public_token using the "/api/set_access_token" endpoint.
+3. Link flow uses that public_token to generate a access_token and a item_id. The access_token and item_id are then used to make calls to retrieve other user data(transactions, indentity, balance etc...)
+   [Link flow](https://plaid.com/docs/link/) is a client side UI that you can us to link your accounts to Plaid, so that you can access the relavent information using the Plaid API
+
+For example if you want to receive all the accounts you would use the following method:
+
+    app.get('/api/accounts', async function (request, response, next) {
+      try {
+        const accountsResponse = await client.accountsGet({
+          access_token: accessToken,
+        });
+        prettyPrintResponse(accountsResponse);
+        response.json(accountsResponse.data);
+      } catch (error) {
+        prettyPrintResponse(error);
+        return response.json(formatError(error.response));
+      }
+    });
+
+It is was hard for me to use Insomnia to retrieve the data becuase I first needed to have a access_token. One way I did manage to get information back, was after I logged data inside frontend/index and by using the access_token from the console.log and [this method](https://documenter.getpostman.com/view/4675947/RWMLHkHR#64d97a2b-071b-4826-838c-a8acec7d33ec) I was able to get the list of transactions. (/frontend/pictures/Capture.PNG)
+
+It is possible to use the website to login and view the relavent information.
+
+1. you need to search for oauth bank and select the first Platypus OAuth Bank.
+2. The userName and password is user_good for both
+3. Since this is a test run you dont need a mobile or a verification code
+4. after selecting an account you can make requests and see the relavent info
+
 # Plaid quickstart
 
 This repository accompanies Plaid's [**quickstart guide**][quickstart].
@@ -234,5 +265,3 @@ product enabled.
 [docker]: https://www.docker.com
 [dashboard-api-section]: https://dashboard.plaid.com/team/api
 [contact-sales]: https://plaid.com/contact
-
-# Explanation
