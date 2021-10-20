@@ -1,4 +1,4 @@
-import React, { useEffect, useContext, useCallback } from "react";
+import React, { useEffect, useContext, useCallback, useState } from "react";
 
 import Header from "./Components/Headers";
 import Products from "./Components/ProductTypes/Products";
@@ -9,6 +9,7 @@ import styles from "./App.module.scss";
 
 const App = () => {
   const { linkSuccess, isItemAccess, dispatch } = useContext(Context);
+  const [tokenId,setTokenId]=useState("")
 
   const getInfo = useCallback(async () => {
     const response = await fetch("/api/info", { method: "POST" });
@@ -17,6 +18,7 @@ const App = () => {
       return { paymentInitiation: false };
     }
     const data = await response.json();
+    console.log("api-info",data)
     const paymentInitiation: boolean = data.products.includes(
       "payment_initiation"
     );
@@ -60,6 +62,24 @@ const App = () => {
     [dispatch]
   );
 
+
+  const getLinkToken = 
+    async () => {
+      const response = await fetch("/api/create_link_token", {
+        method: "POST",
+      });
+      if (!response.ok) {
+        return;
+      }
+      const data = await response.json();
+      if (data) {
+        if (data.error != null) {
+          return;
+        }
+      }
+      setTokenId(data.link_token)
+    };
+
   useEffect(() => {
     const init = async () => {
       const { paymentInitiation } = await getInfo(); // used to determine which path to take when generating token
@@ -83,6 +103,8 @@ const App = () => {
     <div className={styles.App}>
       <div className={styles.container}>
         <Header />
+        <button onClick={()=>{getLinkToken()}}>link token</button>
+        {tokenId}
         {linkSuccess && isItemAccess && (
           <>
             <Products />

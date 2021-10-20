@@ -11,6 +11,7 @@ const Link = () => {
     (public_token: string) => {
       // send public_token to server
       const setToken = async () => {
+        console.log(public_token)
         const response = await fetch("/api/set_access_token", {
           method: "POST",
           headers: {

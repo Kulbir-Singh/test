@@ -67,6 +67,7 @@ const Header = () => {
           ) : (
             <div className={styles.linkButton}>
               <Link />
+              <button>token link</button>
             </div>
           )}
         </>

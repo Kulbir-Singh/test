@@ -104,6 +104,7 @@ app.post('/api/create_link_token', async function (request, response) {
   if (PLAID_ANDROID_PACKAGE_NAME !== '') {
     configs.android_package_name = PLAID_ANDROID_PACKAGE_NAME;
   }
+
   try {
     const createTokenResponse = await client.linkTokenCreate(configs);
     prettyPrintResponse(createTokenResponse);
